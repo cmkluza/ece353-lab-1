@@ -11,8 +11,8 @@
 typedef struct {
     int numSets; /**< number of sets within the cache */
     int numBlocks; /**< number of blocks within the cache */
+    int setAssoc; /**< set associativity of the cache */
 
-    int memAddrBits; /**< total bits in a memory address */
     int offsetBits; /**< number of offset bits in address */
     int indexBits; /**< number of index bits in address */
     int tagBits; /**< number of tag bits in address */
@@ -94,5 +94,15 @@ void updateOnHit(Cache *cache, int addr);
  * @param addr the address where the miss occurred
  */
 void updateOnMiss(Cache *cache, int addr);
+
+/**
+ * Allocates and configures a cache struct given the cache parameters.
+ *
+ * @param setAssoc the set associativity for the cache
+ * @param blockSize the block size for the cache (bytes)
+ * @param cacheSize the total cache size (kilobytes)
+ * @return a pointer to a cache configured for the given parameters
+ */
+Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize);
 
 #endif
