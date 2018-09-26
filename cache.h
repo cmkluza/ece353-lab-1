@@ -49,9 +49,7 @@ int whichSet(Cache *cache, int addr);
  * @return the number of bits in the set index field for the given cache
  */
 int setIndexLength(Cache *cache);
-{
-indexBits = _log2(numBlocks);
-}
+
 /**
  * Sets the number of bits in the line offset field of the address.
  *
@@ -108,14 +106,5 @@ void updateOnMiss(Cache *cache, int addr);
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize);
 
 #endif
-/**
- * Psuedo-log2 method that only works for powers of 2.
- *
- * @param num the number to take log2 of
- * @return log2 of a number that is a power of 2
- */
-static int _log2(unsigned int num) {
-    int result = 0;
-    while ((num >>= 1) > 0) ++result;
-    return result;
-}
+
+
