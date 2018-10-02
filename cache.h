@@ -5,8 +5,10 @@
 // Structs, enums, typdefs //
 /////////////////////////////
 
+// todo convert all int/unsigned to uint32_t (int32_t for lruArray) to fit 32-bit addresses without worry?
+
 /** 
- * A collection of ccahe configuration info and arrays storing relevant cache data.
+ * A collection of cache configuration info and arrays storing relevant cache data.
  */
 typedef struct {
     int numSets; /**< number of sets within the cache */
@@ -104,5 +106,14 @@ void updateOnMiss(Cache *cache, int addr);
  * @return a pointer to a cache configured for the given parameters
  */
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize);
+
+/**
+ * Determines whether or not the given address hits the cache.
+ *
+ * @param cache a pointer to a configured cache
+ * @param addr the address to check
+ * @return 0 if there's no hit, nonzero if there's a hit
+ */
+int isHit(Cache *cache, int addr);
 
 #endif

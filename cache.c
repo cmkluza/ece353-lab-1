@@ -46,6 +46,19 @@ Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     return cache;
 }
 
+int isHit(Cache *cache, int addr) {
+    // determine which set the block is in
+    int set = whichSet(cache, addr);
+    // get the tag for this address
+    int tag = tagBits(cache, addr);
+    // loop through each block in this set looking for a matching tag
+    for (int i = 0; i < cache->setAssoc; ++i) {
+        if (lruArray[set][i] == tag) return true;
+    }
+    // none of the blocks match
+    return false;
+}
+
 /**
  * Psuedo-log2 method that only works for powers of 2.
  *
