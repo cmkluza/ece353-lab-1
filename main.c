@@ -1,0 +1,43 @@
+#include "cache.h"
+#include "debug.h"
+
+long addressHits, addressMisses;
+
+int main(int argc, char *argv[]) {
+    if (argc != 5) {
+        printf("Usage: ./cache-sim set_associativity block_size_b cache_size_kb tracefile\n");
+        return 0;
+    }
+    // get parameters from command line
+    long setAssoc = strtol(argv[1], NULL, 10);
+    long blockSize = strtol(argv[2], NULL, 10);
+    long cacheSize = strtol(argv[3], NULL, 10);
+    FILE *fp = fopen(argv[4], "r"); // open trace file for reading
+    
+    // check that the file was opened
+    if (!fp) {
+        fprintf(stderr, "[ERROR] unable to open file: %s\n", argv[4]);
+        return 1;
+    }
+    DEBUG("setAssoc == %ld, blockSize == %ld, cacheSize == %ld\n",
+            setAssoc, blockSize, cacheSize);
+    
+    // buffer to read trace into
+    char address[8]; // address is 8 bytes at most
+    
+    // process each line in the file
+    while (fgets(address, 8, fp)) {
+        // process the hex address into a number
+        long addr = strtol(address, NULL, 16);
+        // see if we've hit
+        if (isHit(cache, addr)) 
+    }
+
+    // check for irregular stopping
+    if (!feof(fp)) {
+        fprintf(stderr, "[ERROR] unexpected error reading addresses: %s\n",
+                strerror(errno));
+    }
+
+    
+        
