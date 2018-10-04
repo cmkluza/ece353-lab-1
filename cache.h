@@ -20,13 +20,11 @@ typedef struct {
     int tagBits; /**< number of tag bits in address */
 
     /**
-     * Array of block tags. Subscripted as `[i][j]` where `i` refers to the set and `j`
-     * refers to the block.
+     * Array of block tags. Subscripted as `[set][block]`.
      */
     unsigned int **tagArray;
     /**
-     * Array of block LRU statuses. Subscripted as `[i][j]` where `i` refers to the set
-     * and `j` refers to the block.
+     * Array of block LRU statuses. Subscripted as `[set][block]`.
      */
     int **lruArray;
 } Cache;
@@ -106,14 +104,5 @@ void updateOnMiss(Cache *cache, int addr);
  * @return a pointer to a cache configured for the given parameters
  */
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize);
-
-/**
- * Determines whether or not the given address hits the cache.
- *
- * @param cache a pointer to a configured cache
- * @param addr the address to check
- * @return 0 if there's no hit, nonzero if there's a hit
- */
-int isHit(Cache *cache, int addr);
 
 #endif

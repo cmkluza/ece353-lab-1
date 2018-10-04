@@ -31,32 +31,27 @@ Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     }
 
     // allocate blocks for each set
-    int i;
-    for (i = 0; i < cache->numSets; ++i) {
-        *(cache->tagArray + i) = malloc(setAssoc * sizeof(unsigned int));
-        *(cache->lruArray + i) = malloc(setAssoc * sizeof(int));
-        if (!*(cache->tagArray + i) || !*(cache->lruArray + i)) {
+    int set;
+    for (set = 0; set < cache->numSets; ++set) {
+        *(cache->tagArray + set) = malloc(setAssoc * sizeof(unsigned int));
+        *(cache->lruArray + set) = malloc(setAssoc * sizeof(int));
+        if (!*(cache->tagArray + set) || !*(cache->lruArray + set)) {
             fprintf(stderr, "memory allocation failed - "
                     "couldn't allocate %d blocks for set %d in %s, terminating program\n",
-                    setAssoc, i, !*(cache->tagArray + i) ? "tagArray" : "lruArray");
+                    setAssoc, set, !*(cache->tagArray + set) ? "tagArray" : "lruArray");
             exit(EXIT_FAILURE);
         }
     }
 
-    return cache;
-}
-
-int isHit(Cache *cache, int addr) {
-    // determine which set the block is in
-    int set = whichSet(cache, addr);
-    // get the tag for this address
-    int tag = tagBits(cache, addr);
-    // loop through each block in this set looking for a matching tag
-    for (int i = 0; i < cache->setAssoc; ++i) {
-        if (lruArray[set][i] == tag) return true;
+    // initialize each value in the lruArray to "invalid" (-1)
+    int block;
+    for (set = 0; set < cache->numSets; ++set) { // loop through each set
+        for (block = 0; block < setAssoc; ++block) { // loop through each block in each set
+            cache->lruArray[set][block] = -1;
+        }
     }
-    // none of the blocks match
-    return false;
+
+    return cache;
 }
 
 /**
