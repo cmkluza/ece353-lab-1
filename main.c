@@ -56,6 +56,10 @@ int main(int argc, char *argv[]) {
     printf("%s %ld %ld %ld %f\n",
             argv[4], cacheSize, setAssoc, blockSize,
            ((double) misses) / (hits + misses));
+
+    cacheFree(cache);
+
+    return 0;
 }
 
     
