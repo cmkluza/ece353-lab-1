@@ -58,6 +58,7 @@ void cacheTest(int argc, char *argv[]) {
     }
 
     // print out the cache tags
+    printf("================ PRINTING TAGS ================\n");
     printf("SET\t\t");
     int i;
     for (i = 0; i < cache->setAssoc; ++i) printf("BLOCK %d\t\t\t", i);
@@ -71,5 +72,22 @@ void cacheTest(int argc, char *argv[]) {
         }
         printf("\n");
     }
+
+    // print out the cache lru
+    printf("================ PRINTING LRU ================\n");
+    printf("SET\t\t");
+    for (i = 0; i < cache->setAssoc; ++i) printf("BLOCK %d\t\t", i);
+    printf("\n");
+    for (set = 0; set < cache->numSets; ++set) {
+        printf("Set %d", set);
+        if (set < 1000) printf("\t");
+        // loop through each block in each set
+        for (block = 0; block < cache->setAssoc; ++block) {
+            printf("\t%d\t", cache->lruArray[set][block]);
+        }
+        printf("\n");
+    }
+
+    cacheFree(cache);
 }
 
