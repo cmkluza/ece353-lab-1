@@ -105,4 +105,11 @@ void updateOnMiss(Cache *cache, int addr);
  */
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize);
 
+/**
+ * Frees space allocated for a cache.
+ *
+ * @param cache the cache to be allocated
+ */
+ void cacheFree(Cache *cache);
+
 #endif

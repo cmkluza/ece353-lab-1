@@ -5,7 +5,7 @@
 static int _log2(unsigned int num);
 
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
-    Cache *cache = malloc(sizeof(Cache));
+    Cache *cache = malloc(sizeof *cache);
     if (!cache) {
         fprintf(stderr, "memory allocation failed - couldn't allocate cache struct, terminating program\n");
         exit(EXIT_FAILURE);
@@ -21,8 +21,8 @@ Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     cache->tagBits = 32 - cache->offsetBits - cache->indexBits;
     
     // allocate an array containing each set
-    cache->tagArray = malloc(cache->numSets * sizeof(unsigned int *));
-    cache->lruArray = malloc(cache->numSets * sizeof(int *));
+    cache->tagArray = malloc(cache->numSets * sizeof *cache->tagArray);
+    cache->lruArray = malloc(cache->numSets * sizeof *cache->lruArray);
     if (!cache->tagArray || !cache->lruArray) {
         fprintf(stderr, "memory allocation failed - "
                 "couldn't allocate %d sets for %s in cache, terminating program\n",
@@ -31,27 +31,35 @@ Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     }
 
     // allocate blocks for each set
-    int set;
+    int set, block;
     for (set = 0; set < cache->numSets; ++set) {
-        *(cache->tagArray + set) = malloc(setAssoc * sizeof(unsigned int));
-        *(cache->lruArray + set) = malloc(setAssoc * sizeof(int));
+        *(cache->tagArray + set) = malloc(setAssoc * sizeof **(cache->tagArray + set));
+        *(cache->lruArray + set) = malloc(setAssoc * sizeof**(cache->lruArray + set));
         if (!*(cache->tagArray + set) || !*(cache->lruArray + set)) {
             fprintf(stderr, "memory allocation failed - "
                     "couldn't allocate %d blocks for set %d in %s, terminating program\n",
                     setAssoc, set, !*(cache->tagArray + set) ? "tagArray" : "lruArray");
             exit(EXIT_FAILURE);
         }
-    }
-
-    // initialize each value in the lruArray to "invalid" (-1)
-    int block;
-    for (set = 0; set < cache->numSets; ++set) { // loop through each set
-        for (block = 0; block < setAssoc; ++block) { // loop through each block in each set
-            cache->lruArray[set][block] = -1;
-        }
+        // initialize each value in lruArray to "invalid" (01)
+        for (block = 0; block < setAssoc; ++block) cache->lruArray[set][block] = -1;
     }
 
     return cache;
+}
+
+void cacheFree(Cache *cache) {
+    // free each set in memory
+    int set;
+    for (set = 0; set < cache->numSets; ++set) {
+        free(cache->tagArray[set]);
+        free(cache->lruArray[set]);
+    }
+    // free the arrays
+    free(cache->tagArray);
+    free(cache->lruArray);
+    // free the cache itself
+    free(cache);
 }
 
 /**
