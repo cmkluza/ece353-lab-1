@@ -75,8 +75,17 @@ int tagBits(Cache *cache, int addr);
  * @param addr the address to attempt to pull from the cache
  * @return the set in which the accessed block can be found or -1 for a miss
  */
-int hitWay(Cache *cache, int addr);
+int hitWay(Cache *cache, int addr){
+    
+if (whichSet(Cache *cache, int addr)==-1){    //if whichSet returns -1 it is a miss
+updateOnMiss(Cache *cache, int addr);
+return -1;
 
+else{                                         //else it is a hit
+updateOnHit(Cache *cache, int addr);
+return whichSet(Cache *cache, int addr)+1;    
+}
+}
 /**
  * Updates the `tagArray` and `lruArray` upon a hit. This function is only called on a cache
  * hit.
