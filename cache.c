@@ -50,6 +50,22 @@ int hitWay(Cache *cache, int addr){
 }
 }
 
+void updateOnHit(Cache *cache, unsigned long addr){
+	for (int i=0; i<cache->numSets; i++){
+		for (int j=0; j<cache->numBlocks; i++){
+			if (cache->lruArray[i][j]==-1){
+			}
+			if ((i==whichSet(Cache *cache, unsigned long addr))&&(j==indexBits(Cache *cache, unsigned long addr))){
+				cache->lruArray[i][j]==0;
+			}
+			else{
+				cache->lruArray[i][j]==cache->lruArray[i][j]+1;
+			}
+		}
+	}
+}
+}
+
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     Cache *cache = malloc(sizeof *cache);
     if (!cache) {
