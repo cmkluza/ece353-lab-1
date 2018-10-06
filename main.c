@@ -1,3 +1,14 @@
+/**
+ * ECE 353 - Computer Systems Lab
+ * Lab I, Cache Simulator
+ *
+ * main.c - reads a trace of addresses from a file and
+ * simulates accessing them in a CPU cache of the
+ * specified configuration.
+ *
+ * @authors Laura Deburgo, Cameron Kluza, Kyle McWherter
+ */
+
 #include "cache.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -11,6 +22,7 @@ int main(int argc, char *argv[]) {
         printf("Usage: ./cache-sim set_associativity block_size_b cache_size_kb tracefile\n");
         return 0;
     }
+
     // get parameters from command line
     long setAssoc = strtol(argv[1], NULL, 10);
     long blockSize = strtol(argv[2], NULL, 10);

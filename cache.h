@@ -1,3 +1,13 @@
+/**
+ * ECE 353 - Computer Systems Lab
+ * Lab I, Cache Simulator
+ *
+ * cache.h - outlines the interface necessary to simulate
+ * the CPU cache.
+ *
+ * @authors Laura Deburgo, Cameron Kluza, Kyle McWherter
+ */
+
 #ifndef CACHE_H
 #define CACHE_H
 

@@ -1,3 +1,13 @@
+/**
+ * ECE 353 - Computer Systems Lab
+ * Lab I, Cache Simulator
+ *
+ * cache.c - implements functions necessary to simulate
+ * CPU cache accesses.
+ *
+ * @authors Laura Deburgo, Cameron Kluza, Kyle McWherter
+ */
+
 #include "cache.h"
 #include <stdlib.h>
 #include <stdio.h>
