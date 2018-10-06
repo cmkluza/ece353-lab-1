@@ -30,7 +30,7 @@ int whichSet(Cache *cache, unsigned long addr){
 
 	int setNum=-1; 
 	for (int i=0; i< cache->numSets; i++) {
-		if ( tagBits(Cache *cache, unsigned long addr) == cache->tagArray[indexBits(Cache *cache, unsigned long addr)][i]) 
+		if (tagBits(Cache *cache, unsigned long addr)==cache->tagArray[indexBits(Cache *cache, unsigned long addr)][i]) 
 		{
 		setNum= i;
 		}
