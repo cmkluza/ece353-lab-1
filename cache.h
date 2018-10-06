@@ -78,12 +78,13 @@ int tagBits(Cache *cache, int addr);
 int hitWay(Cache *cache, int addr){
     
 if (whichSet(Cache *cache, int addr)==-1){    //if whichSet returns -1 it is a miss
-updateOnMiss(Cache *cache, int addr);
-return -1;
-
+    updateOnMiss(Cache *cache, int addr);
+    return -1;
+}
+    
 else{                                         //else it is a hit
-updateOnHit(Cache *cache, int addr);
-return whichSet(Cache *cache, int addr)+1;    
+    updateOnHit(Cache *cache, int addr);
+    return whichSet(Cache *cache, int addr)+1;    
 }
 }
 /**
