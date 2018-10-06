@@ -63,7 +63,7 @@ int offsetLength(Cache *cache);
  * @param addr the address to get the tag bits from
  * @return the tag bits associated with the address for the given cache
  */
-int tagBits(Cache *cache, unsigned long addr);
+unsigned tagBits(Cache *cache, unsigned long addr);
 
 /**
  * If there is a hit, this outputs the cache way in which the accessed line can be found; it
@@ -109,5 +109,14 @@ Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize);
  * @param cache the cache to be allocated
  */
  void cacheFree(Cache *cache);
+
+ /**
+  * Returns the index of the given address.
+  *
+  * @param cache a pointer to a configured cache
+  * @param addr the address to extract index bits from
+  * @return the index for this address
+  */
+int indexBits(Cache *cache, unsigned long addr);
 
 #endif

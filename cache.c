@@ -4,7 +4,7 @@
 
 static int _log2(unsigned int num);
 
-int tagBits(Cache *cache, unsigned long addr) {
+unsigned tagBits(Cache *cache, unsigned long addr) {
     // the tag bits will be the left-most bits of the 32-bit address
     return (unsigned) addr >> (cache->indexBits + cache->offsetBits);
 }
