@@ -13,7 +13,7 @@ int indexBits(Cache *cache, unsigned long addr) {
     //
     addr << (cache->tagBits);
     //
-    return (unsigned) addr >> (cache->offsetBits);
+    return (unsigned) addr >> (cache->offsetBits+cache->indexBits);
 }
 
 int setIndexLength(Cache *cache){
