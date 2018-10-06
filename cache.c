@@ -11,7 +11,7 @@ int tagBits(Cache *cache, unsigned long addr) {
 
 int indexBits(Cache *cache, unsigned long addr) {
     //shift out tagbits
-    addr << (cache->tagBits);                         
+    addr <<= (cache->tagBits);                         
     //then shift out offset bits
     return (unsigned) addr >> (cache->offsetBits + cache->tagBits);
 }
@@ -59,7 +59,7 @@ void updateOnHit(Cache *cache, unsigned long addr){
 			if (cache->lruArray[i][j]==-1){                 //if hasn't been used
 			}
 			if ((i==whichSet(cache, addr))&&(j==indexBits(cache, addr))){
-				cache->lruArray[i][j]==0;                           
+				cache->lruArray[i][j]=0;                           
 			                                               //if its the place of the hit (reset LRU)
 			}
 			else{
