@@ -4,6 +4,8 @@
 #include <string.h>
 
 void cacheTest(int argc, char *argv[]);
+void tagBitsTest(int argc, char *argv[]);
+void _print_bits(unsigned num);
 
 int main(int argc, char *argv[]) {
     if (argc < 2 || *argv[1] != '-') {
@@ -15,12 +17,53 @@ int main(int argc, char *argv[]) {
         case 'c':
             cacheTest(argc, argv);
             break;
-        
+
+        case 't':
+            tagBitsTest(argc, argv);
+            break;
+
         default:
             printf("usage: ./test -<mode> [parameters]\n");
     }
-    
+
     return 0;
+}
+
+void tagBitsTest(int argc, char *argv[]) {
+    if (argc != 6) {
+        printf("usage: ./test -t set_associativity block_size_b cache_size_kb hex_num\n");
+        return;
+    }
+
+    long setAssoc = strtol(argv[2], NULL, 10);
+    long blockSize = strtol(argv[3], NULL, 10);
+    long cacheSize = strtol(argv[4], NULL, 10);
+    unsigned long inputNum = (unsigned long) strtol(argv[5], NULL, 16);
+
+    Cache *cache = cacheAlloc((int) setAssoc, (int) blockSize, (int) cacheSize);
+
+    printf("Cache allocated:\n\t"
+           "Number of offset bits: %d\n\t"
+           "Number of index bits: %d\n\t"
+           "Number of tag bits: %d\n\n\t"
+           "Number of sets: %d\n\t"
+           "Number of blocks: %d\n\t"
+           "Number of blocks/set: %d\n",
+           cache->offsetBits, cache->indexBits, cache->tagBits,
+           cache->numSets, cache->numBlocks, cache->setAssoc);
+
+    printf("Input num:\n");
+    printf("\tHex: %lx\n", inputNum);
+    printf("\tBinary: ");
+    _print_bits((unsigned) inputNum);
+
+    printf("\nTag bits:\n");
+    unsigned tag = (unsigned) tagBits(cache, inputNum);
+    printf("\tHex: %x\n", tag);
+    printf("\tBinary: ");
+    _print_bits(tag);
+
+    cacheFree(cache);
 }
 
 void cacheTest(int argc, char *argv[]) {
@@ -42,10 +85,10 @@ void cacheTest(int argc, char *argv[]) {
            "Number of sets: %d\n\t"
            "Number of blocks: %d\n\t"
            "Number of blocks/set: %d\n",
-           cache->offsetBits, cache->indexBits, cache->tagBits, 
+           cache->offsetBits, cache->indexBits, cache->tagBits,
            cache->numSets, cache->numBlocks, cache->setAssoc);
 
-    if (argc != 6 || strcmp(argv[5],"out") != 0) return;
+    if (argc != 6 || strcmp(argv[5], "out") != 0) return;
 
     int set, block;
     srand((1 << 3) + (1 << 6));
@@ -91,3 +134,10 @@ void cacheTest(int argc, char *argv[]) {
     cacheFree(cache);
 }
 
+void _print_bits(unsigned num) {
+    // hard-coded to print 32-bit values
+    int i;
+    for (i = 31; i >= 0; --i) {
+        printf("%u", (num >> i) & 1);
+    }
+}
