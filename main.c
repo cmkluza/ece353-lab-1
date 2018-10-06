@@ -30,20 +30,17 @@ int main(int argc, char *argv[]) {
 
     // buffer to read trace into
     char address[8]; // address is 8 bytes at most
-    long addr; // current address
-    int block; // which block the data is in, or else -1
+    unsigned long addr; // current address
 
     // process each line in the file
     while (fgets(address, 8, fp)) {
         // process the hex address into a number
-        addr = strtol(address, NULL, 16);
+        addr = (unsigned long) strtol(address, NULL, 16);
         // see if we've hit
-        if ((block = hitWay(cache, addr)) != -1) {
+        if (hitWay(cache, addr) != -1) {
             ++hits;
-            updateOnHit(cache, addr);
         } else {
             ++misses;
-            updateOnMiss(cache, addr);
         }
     }
 
