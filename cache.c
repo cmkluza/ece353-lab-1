@@ -9,6 +9,13 @@ int tagBits(Cache *cache, unsigned long addr) {
     return (unsigned) addr >> (cache->indexBits + cache->offsetBits);
 }
 
+int indexBits(Cache *cache, unsigned long addr) {
+    //
+    addr << (cache->tagBits);
+    //
+    return (unsigned) addr >> (cache->offsetBits);
+}
+
 int setIndexLength(Cache *cache){
     // returns number of index bits in the address
     return (unsigned) cache->indexBits;
@@ -23,7 +30,8 @@ int whichSet(Cache *cache, unsigned long addr){
 
 	int setNum=-1; 
 	for (int i=0; i< cache->numSets; i++) {
-		if ( tagBits(Cache *cache, unsigned long addr) == cache->tagArray[][i] ) {
+		if ( tagBits(Cache *cache, unsigned long addr) == cache->tagArray[indexBits(Cache *cache, unsigned long addr)][i]) 
+		{
 		setNum= i;
 		}
 	}
@@ -36,7 +44,6 @@ int hitWay(Cache *cache, int addr){
 		updateOnMiss(Cache *cache, unsigned addr);
 		return -1;
 }
-
 	else{                                                  //else it is a hit
 		updateOnHit(Cache *cache, unsigned long addr);
 		return whichSet(Cache *cache, unsigned long addr)+1;    
