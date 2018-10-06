@@ -40,7 +40,17 @@ typedef struct {
  * @param addr the address to check
  * @return a number [0,numSets) that indicates which set the address falls in
  */
-int whichSet(Cache *cache, int addr);
+int whichSet(Cache *cache, int addr){
+
+    int setNum=-1; 
+    for (int i=0; i< cache.numSets; i++) {
+        if ( tagBits(cache, addr) == cache.tagArray[cache.index][i] ) {
+        setNum= i;
+        }
+    }
+    
+    return setNum;
+}
 
 /**
  * Outputs the number of bits in the set index field of the address.
