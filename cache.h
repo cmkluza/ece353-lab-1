@@ -56,7 +56,9 @@ int setIndexLength(Cache *cache);
  * @param cache a pointer to a configured cache
  * @return the number of bits in the line offset field for the given cache
  */
-int offsetLength(Cache *cache);
+int offsetLength(Cache *cache){
+   return cache.offsetBits;          // IDK how the struct thing works
+}
 
 /**
  * Outputs the tag bits associated with the address.
