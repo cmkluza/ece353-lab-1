@@ -11,9 +11,9 @@ unsigned tagBits(Cache *cache, unsigned long addr) {
 
 int indexBits(Cache *cache, unsigned long addr) {
     //shift out tagbits
-    addr <<= (cache->tagBits);
+    unsigned long addr1=addr << (cache->tagBits);
     //then shift out offset bits
-    return (unsigned) addr >> (cache->offsetBits + cache->tagBits);
+    return addr1 >> (cache->offsetBits + cache->tagBits);
 }
 
 int setIndexLength(Cache *cache) {
@@ -28,15 +28,9 @@ int offsetLength(Cache *cache) {
 
 int whichSet(Cache *cache, unsigned long addr) {
 
-    int setNum = -1;                                   //return if miss
-    int i;
-    for (i = 0; i < cache->numSets; i++) {
-        if (tagBits(cache, addr) == cache->tagArray[indexBits(cache, addr)][i]) {
-            setNum = i;                              //return index if hit
-        }
-    }
-    return setNum;
+    return (int) indexBits(cache, addr);
 }
+
 
 int hitWay(Cache *cache, unsigned long addr) {
     if (whichSet(cache, addr) == -1) {    //if whichSet returns -1 it is a miss
@@ -52,7 +46,7 @@ void updateOnHit(Cache *cache, unsigned long addr) {
     int i;
     for (i = 0; i < cache->numSets; i++) {                            //go into each set
         int j;
-        for (j = 0; j < cache->numBlocks; i++) {                  //then each block
+        for (j = 0; j < cache->setAssoc; i++) {                  //then each block
             if (cache->lruArray[i][j] == -1) {                 //if hasn't been used
             }
             if ((i == whichSet(cache, addr)) && (j == indexBits(cache, addr))) {
