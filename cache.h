@@ -40,17 +40,7 @@ typedef struct {
  * @param addr the address to check
  * @return a number [0,numSets) that indicates which set the address falls in
  */
-int whichSet(Cache *cache, unsigned long addr){
-
-    int setNum=-1; 
-    for (int i=0; i< cache.numSets; i++) {
-        if ( tagBits(Cache *cache, unsigned long addr) == cache.tagArray[i][cache.index] ) {    //figure out how to get index bits
-        setNum= i;
-        }
-    }
-    
-    return setNum;
-}
+int whichSet(Cache *cache, unsigned long addr);
 
 /**
  * Outputs the number of bits in the set index field of the address.
@@ -58,9 +48,7 @@ int whichSet(Cache *cache, unsigned long addr){
  * @param cache a pointer to a configured cache
  * @return the number of bits in the set index field for the given cache
  */
-int setIndexLength(Cache *cache){
-    return cache->indexBits;                       //IDK how the struct thing works
-}
+int setIndexLength(Cache *cache);
 
 /**
  * Outputs the number of bits in the line offset field of the address.
@@ -68,9 +56,7 @@ int setIndexLength(Cache *cache){
  * @param cache a pointer to a configured cache
  * @return the number of bits in the line offset field for the given cache
  */
-int offsetLength(Cache *cache){
-   return cache->offsetBits;          // IDK how the struct thing works
-}
+int offsetLength(Cache *cache);
 
 /**
  * Outputs the tag bits associated with the address.
@@ -89,18 +75,7 @@ int tagBits(Cache *cache, int addr);
  * @param addr the address to attempt to pull from the cache
  * @return the set in which the accessed block can be found or -1 for a miss
  */
-int hitWay(Cache *cache, unsigned long addr){
-    
-    if (whichSet(Cache *cache, unsigned long addr)==-1){    //if whichSet returns -1 it is a miss
-        updateOnMiss(Cache *cache, unsigned long addr);
-        return -1;
-    }
-    
-    else{                                         //else it is a hit
-        updateOnHit(Cache *cache, unsigned long addr);
-        return whichSet(Cache *cache, unsigned long addr)+1;    
-    }
-}
+int hitWay(Cache *cache, unsigned long addr);
 /**
  * Updates the `tagArray` and `lruArray` upon a hit. This function is only called on a cache
  * hit.
