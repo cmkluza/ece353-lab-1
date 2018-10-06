@@ -44,7 +44,7 @@ int whichSet(Cache *cache, int addr){
 
     int setNum=-1; 
     for (int i=0; i< cache.numSets; i++) {
-        if ( tagBits(cache, addr) == cache.tagArray[cache.index][i] ) {
+        if ( tagBits(cache, addr) == cache.tagArray[cache.index][i] ) {    //figure out how to get index bits
         setNum= i;
         }
     }
@@ -58,7 +58,9 @@ int whichSet(Cache *cache, int addr){
  * @param cache a pointer to a configured cache
  * @return the number of bits in the set index field for the given cache
  */
-int setIndexLength(Cache *cache);
+int setIndexLength(Cache *cache){
+    return cache.indexBits;                       //IDK how the struct thing works
+}
 
 /**
  * Outputs the number of bits in the line offset field of the address.
