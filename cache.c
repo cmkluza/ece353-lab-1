@@ -9,6 +9,16 @@ int tagBits(Cache *cache, unsigned long addr) {
     return (unsigned) addr >> (cache->indexBits + cache->offsetBits);
 }
 
+int setIndexLength(Cache *cache){
+    // returns number of index bits in the address
+    return (unsigned) cache->indexBits;
+}
+
+int offsetLength(Cache *cache){
+    //returns number of offset bits in the address
+	return (unsigned) cache->offsetBits;
+}
+
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     Cache *cache = malloc(sizeof *cache);
     if (!cache) {
