@@ -59,7 +59,7 @@ int whichSet(Cache *cache, unsigned long addr){
  * @return the number of bits in the set index field for the given cache
  */
 int setIndexLength(Cache *cache){
-    return cache.indexBits;                       //IDK how the struct thing works
+    return cache->indexBits;                       //IDK how the struct thing works
 }
 
 /**
@@ -69,7 +69,7 @@ int setIndexLength(Cache *cache){
  * @return the number of bits in the line offset field for the given cache
  */
 int offsetLength(Cache *cache){
-   return cache.offsetBits;          // IDK how the struct thing works
+   return cache->offsetBits;          // IDK how the struct thing works
 }
 
 /**
