@@ -11,7 +11,7 @@ unsigned tagBits(Cache *cache, unsigned long addr) {
 
 int indexBits(Cache *cache, unsigned long addr) {
     //shift out tagbits
-    unsigned long addr1=addr <<= (cache->tagBits);
+    unsigned long addr1 = addr << (cache->tagBits); 
     //then shift out offset bits
     return addr1 >> (cache->offsetBits + cache->tagBits);
 }
@@ -35,7 +35,7 @@ int whichSet(Cache *cache, unsigned long addr) {
 int hitWay(Cache *cache, unsigned long addr) {
     int i;
     for(i=0;i<numBlocks;i++){
-    if (cache->tagArray[whichSet(cache, addr)-1][i] == tagBits(cache, addr)) {    //if whichSet returns -1 it is a miss
+    if (cache->tagArray[whichSet(cache, addr)][i] == tagBits(cache, addr)) {    //if whichSet returns -1 it is a miss
         updateOnHit(cache, addr);
         return i;
     } else {                                                  //else it is a hit
