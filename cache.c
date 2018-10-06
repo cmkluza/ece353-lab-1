@@ -37,7 +37,7 @@ int hitWay(Cache *cache, unsigned long addr) {
     for(i=0;i<numBlocks;i++){
     if (cache->tagArray[whichSet(cache, addr)-1][i] == tagBits(cache, addr)) {    //if whichSet returns -1 it is a miss
         updateOnHit(cache, addr);
-        return whichSet(cache, addr);
+        return i;
     } else {                                                  //else it is a hit
         updateOnMiss(cache, addr);
         return -1;
