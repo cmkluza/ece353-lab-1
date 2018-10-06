@@ -1,7 +1,8 @@
 #include "cache.h"
 #include "debug.h"
 #include <stdio.h>
-#include <mem.h>
+#include <string.h>
+#include <errno.h>
 
 long hits, misses;
 
