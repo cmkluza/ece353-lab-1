@@ -28,17 +28,17 @@ int offsetLength(Cache *cache){
 
 int whichSet(Cache *cache, unsigned long addr){
 
-	int setNum=-1; 
+	int setNum=-1;                                   //return if miss
 	for (int i=0; i< cache->numSets; i++) {
 		if (tagBits(Cache *cache, unsigned long addr)==cache->tagArray[indexBits(Cache *cache, unsigned long addr)][i]) 
 		{
-		setNum= i;
+		setNum= i;                              //return index if hit
 		}
 	}
 	return setNum;
 }
 
-int hitWay(Cache *cache, int addr){
+int hitWay(Cache *cache, unsigned long addr){
 
 	if (whichSet(Cache *cache, unsigned long addr)==-1){    //if whichSet returns -1 it is a miss
 		updateOnMiss(Cache *cache, unsigned addr);
@@ -51,15 +51,17 @@ int hitWay(Cache *cache, int addr){
 }
 
 void updateOnHit(Cache *cache, unsigned long addr){
-	for (int i=0; i<cache->numSets; i++){
-		for (int j=0; j<cache->numBlocks; i++){
-			if (cache->lruArray[i][j]==-1){
+	for (int i=0; i<cache->numSets; i++){                            //go into each set
+		for (int j=0; j<cache->numBlocks; i++){                  //then each block
+			if (cache->lruArray[i][j]==-1){                 //if hasn't been used
 			}
 			if ((i==whichSet(Cache *cache, unsigned long addr))&&(j==indexBits(Cache *cache, unsigned long addr))){
-				cache->lruArray[i][j]==0;
+				cache->lruArray[i][j]==0;                           
+			                                               //if its the place of the hit (reset LRU)
 			}
 			else{
 				cache->lruArray[i][j]==cache->lruArray[i][j]+1;
+				                                      //if else then increase its age
 			}
 		}
 	}
