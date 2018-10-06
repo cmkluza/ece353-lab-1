@@ -10,9 +10,9 @@ int tagBits(Cache *cache, unsigned long addr) {
 }
 
 int indexBits(Cache *cache, unsigned long addr) {
-    //
-    addr << (cache->tagBits);
-    //
+    //shift out tagbits
+    addr << (cache->tagBits);                         
+    //then shift out offset bits
     return (unsigned) addr >> (cache->offsetBits + cache->tagBits);
 }
 
