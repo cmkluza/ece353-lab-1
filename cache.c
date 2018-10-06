@@ -1,4 +1,5 @@
 #include "cache.h"
+#include "debug.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -31,7 +32,6 @@ int whichSet(Cache *cache, unsigned long addr) {
     return (int) indexBits(cache, addr);
 }
 
-
 int hitWay(Cache *cache, unsigned long addr) {
     int i, hitBlock = -1;
     for(i=0;i<cache->setAssoc;i++){
@@ -54,7 +54,7 @@ void updateOnHit(Cache *cache, unsigned long addr) {
     int i;
     for (i = 0; i < cache->numSets; i++) {                            //go into each set
         int j;
-        for (j = 0; j < cache->setAssoc; i++) {                  //then each block
+        for (j = 0; j < cache->setAssoc; j++) {                  //then each block
             if (cache->lruArray[i][j] == -1) {                 //if hasn't been used
             }
             if (tagBits(cache, addr)==cache->tagArray[i][j]) {
@@ -93,6 +93,7 @@ void updateOnMiss(Cache *cache, unsigned long addr) {
     }
 
     cache->lruArray[set][lruBlock] = 0;
+    cache->tagArray[set][lruBlock] = tagBits(cache, addr);
 }
 
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
