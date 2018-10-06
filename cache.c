@@ -19,6 +19,30 @@ int offsetLength(Cache *cache){
 	return (unsigned) cache->offsetBits;
 }
 
+int whichSet(Cache *cache, unsigned long addr){
+
+	int setNum=-1; 
+	for (int i=0; i< cache->numSets; i++) {
+		if ( tagBits(Cache *cache, unsigned long addr) == cache->tagArray[][i] ) {
+		setNum= i;
+		}
+	}
+	return setNum;
+}
+
+int hitWay(Cache *cache, int addr){
+
+	if (whichSet(Cache *cache, unsigned long addr)==-1){    //if whichSet returns -1 it is a miss
+		updateOnMiss(Cache *cache, unsigned addr);
+		return -1;
+}
+
+	else{                                                  //else it is a hit
+		updateOnHit(Cache *cache, unsigned long addr);
+		return whichSet(Cache *cache, unsigned long addr)+1;    
+}
+}
+
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     Cache *cache = malloc(sizeof *cache);
     if (!cache) {
