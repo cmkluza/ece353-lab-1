@@ -22,23 +22,18 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "[ERROR] unable to open file: %s\n", argv[4]);
         return 1;
     }
-    printf("setAssoc == %ld, blockSize == %ld, cacheSize == %ld\n",
-                setAssoc, blockSize, cacheSize);
 
     // allocate the cache
     Cache *cache = cacheAlloc(setAssoc, blockSize, cacheSize);
 
     // buffer to read trace into
-    char address[9]; // address is 8 hex chars at most
+    char address[10]; // address is 8 hex chars at most
     unsigned long addr; // current address
 
-    printf("file opened\n");
-
     // process each line in the file
-    while (fgets(address, 9, fp)) {
+    while (fgets(address, 10, fp)) {
         // process the hex address into a number
         addr = (unsigned long) strtol(address, NULL, 16);
-        printf("Read address: %s, as %lx\n", address, addr);
         // see if we've hit
         if (hitWay(cache, addr) != -1) {
             ++hits;
