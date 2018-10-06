@@ -35,12 +35,13 @@ int whichSet(Cache *cache, unsigned long addr) {
 int hitWay(Cache *cache, unsigned long addr) {
     int i;
     for(i=0;i<numBlocks;i++){
-    if (cache->tagArray[whichSet(cache, addr)][i] == tagBits(cache, addr)) {    //if whichSet returns -1 it is a miss
-        updateOnHit(cache, addr);
-        return i;
-    } else {                                                  //else it is a hit
-        updateOnMiss(cache, addr);
-        return -1;
+        if (cache->tagArray[whichSet(cache, addr)][i] == tagBits(cache, addr)) {    //if whichSet returns -1 it is a miss
+            updateOnHit(cache, addr);
+            return i;
+        } else {                                                  //else it is a hit
+            updateOnMiss(cache, addr);
+            return -1;
+        }
     }
 }
 
