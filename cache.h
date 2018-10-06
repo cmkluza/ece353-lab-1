@@ -44,7 +44,7 @@ int whichSet(Cache *cache, int addr){
 
     int setNum=-1; 
     for (int i=0; i< cache.numSets; i++) {
-        if ( tagBits(cache, addr) == cache.tagArray[cache.index][i] ) {    //figure out how to get index bits
+        if ( tagBits(cache, addr) == cache.tagArray[i][cache.index] ) {    //figure out how to get index bits
         setNum= i;
         }
     }
