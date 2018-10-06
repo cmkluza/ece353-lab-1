@@ -33,16 +33,21 @@ int whichSet(Cache *cache, unsigned long addr) {
 
 
 int hitWay(Cache *cache, unsigned long addr) {
-    int i;
-    for(i=0;i<numBlocks;i++){
+    int i, hitBlock = -1;
+    for(i=0;i<cache->setAssoc;i++){
         if (cache->tagArray[whichSet(cache, addr)][i] == tagBits(cache, addr)) {    //if whichSet returns -1 it is a miss
-            updateOnHit(cache, addr);
-            return i;
-        } else {                                                  //else it is a hit
-            updateOnMiss(cache, addr);
-            return -1;
+            // if we match the tag, update the block where we matched
+            hitBlock = i;
         }
     }
+
+    if (hitBlock == -1) { // if block didn't change, it's a miss
+        updateOnMiss(cache, addr);
+    } else { // otherwise hit
+        updateOnHit(cache, addr);
+    }
+
+    return hitBlock;
 }
 
 void updateOnHit(Cache *cache, unsigned long addr) {
