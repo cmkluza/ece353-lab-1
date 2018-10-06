@@ -5,7 +5,10 @@
 
 void cacheTest(int argc, char *argv[]);
 void tagBitsTest(int argc, char *argv[]);
-void _print_bits(unsigned num);
+void indexBitsTest(int argc, char *argv[]);
+void whichSetTest(int argc, char *argv[]);
+
+void _print_bits(unsigned long long num);
 
 int main(int argc, char *argv[]) {
     if (argc < 2 || *argv[1] != '-') {
@@ -22,6 +25,14 @@ int main(int argc, char *argv[]) {
             tagBitsTest(argc, argv);
             break;
 
+        case 'i':
+            indexBitsTest(argc, argv);
+            break;
+
+        case 's':
+            whichSetTest(argc, argv);
+            break;
+
         default:
             printf("usage: ./test -<mode> [parameters]\n");
     }
@@ -31,7 +42,7 @@ int main(int argc, char *argv[]) {
 
 void tagBitsTest(int argc, char *argv[]) {
     if (argc != 6) {
-        printf("usage: ./test -t set_associativity block_size_b cache_size_kb hex_num\n");
+        printf("usage: ./test -t set_associativity block_size_b cache_size_kb hex_addr\n");
         return;
     }
 
@@ -41,16 +52,6 @@ void tagBitsTest(int argc, char *argv[]) {
     unsigned long inputNum = (unsigned long) strtol(argv[5], NULL, 16);
 
     Cache *cache = cacheAlloc((int) setAssoc, (int) blockSize, (int) cacheSize);
-
-    printf("Cache allocated:\n\t"
-           "Number of offset bits: %d\n\t"
-           "Number of index bits: %d\n\t"
-           "Number of tag bits: %d\n\n\t"
-           "Number of sets: %d\n\t"
-           "Number of blocks: %d\n\t"
-           "Number of blocks/set: %d\n",
-           cache->offsetBits, cache->indexBits, cache->tagBits,
-           cache->numSets, cache->numBlocks, cache->setAssoc);
 
     printf("Input num:\n");
     printf("\tHex: %lx\n", inputNum);
@@ -134,10 +135,70 @@ void cacheTest(int argc, char *argv[]) {
     cacheFree(cache);
 }
 
-void _print_bits(unsigned num) {
+void indexBitsTest(int argc, char *argv[]) {
+    if (argc != 6) {
+        printf("usage: ./test -i set_associativity block_size_b cache_size_kb hex_addr\n");
+        return;
+    }
+
+    long setAssoc = strtol(argv[2], NULL, 10);
+    long blockSize = strtol(argv[3], NULL, 10);
+    long cacheSize = strtol(argv[4], NULL, 10);
+    printf("input str: %s\n", argv[5]);
+    unsigned long inputNum = (unsigned long) strtol(argv[5], NULL, 16);
+
+    Cache *cache = cacheAlloc((int) setAssoc, (int) blockSize, (int) cacheSize);
+
+    printf("Cache config: setAssoc = %ld, blockSize = %ld, cacheSize = %ld\n", setAssoc, blockSize, cacheSize);
+    printf("\tnumBlocks = %d, numSets = %d\n", cache->numBlocks, cache->numSets);
+    printf("\toffsetBits = %d, indexBits = %d, tagBits = %d\n", cache->offsetBits, cache->indexBits, cache->tagBits);
+
+
+    printf("Input num:\n");
+    printf("\tHex: %lx\n", inputNum);
+    printf("\tBinary: ");
+    _print_bits(inputNum);
+
+    printf("\nIndex bits:\n");
+    unsigned index = (unsigned) indexBits(cache, inputNum);
+    printf("\tHex: %x\n", index);
+    printf("\tBinary: ");
+    _print_bits(index);
+    printf("\n\tDecimal: %d", index);
+
+    cacheFree(cache);
+}
+
+void whichSetTest(int argc, char *argv[]) {
+    if (argc != 6) {
+        printf("usage: ./test -s set_associativity block_size_b cache_size_kb hex_addr\n");
+        return;
+    }
+
+    long setAssoc = strtol(argv[2], NULL, 10);
+    long blockSize = strtol(argv[3], NULL, 10);
+    long cacheSize = strtol(argv[4], NULL, 10);
+    unsigned long inputNum = (unsigned long) strtol(argv[5], NULL, 16);
+
+    Cache *cache = cacheAlloc((int) setAssoc, (int) blockSize, (int) cacheSize);
+
+    printf("Cache config: setAssoc = %ld, blockSize = %ld, cacheSize = %ld\n", setAssoc, blockSize, cacheSize);
+    printf("\tnumBlocks = %d, numSets = %d\n", cache->numBlocks, cache->numSets);
+    printf("\toffsetBits = %d, indexBits = %d, tagBits = %d\n", cache->offsetBits, cache->indexBits, cache->tagBits);
+
+
+    printf("Input address:\n");
+    printf("\tAddress: %lx\n", inputNum);
+
+    printf("Set: %d\n", whichSet(cache, inputNum));
+
+    cacheFree(cache);
+}
+
+void _print_bits(unsigned long long num) {
     // hard-coded to print 32-bit values
     int i;
     for (i = 31; i >= 0; --i) {
-        printf("%u", (num >> i) & 1);
+        printf("%u", (unsigned int) ((num >> i) & 1));
     }
 }
