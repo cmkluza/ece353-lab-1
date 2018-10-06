@@ -1,5 +1,4 @@
 #include "cache.h"
-#include "debug.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -72,7 +71,7 @@ void updateOnMiss(Cache *cache, unsigned long addr) {
     // find a location to store the new tag
     int lruBlock = 0, block;
     int set = whichSet(cache, addr);
-    for (block = 0; block < cache->numBlocks; ++block) {
+    for (block = 0; block < cache->setAssoc; ++block) {
         // stop immediately if we find an unused location
         if (cache->lruArray[set][block] == -1) {
             lruBlock = block;
@@ -86,7 +85,7 @@ void updateOnMiss(Cache *cache, unsigned long addr) {
     }
 
     // increment every other valid block
-    for (block = 0; block < cache->numBlocks; ++block) {
+    for (block = 0; block < cache->setAssoc; ++block) {
         if (cache->lruArray[set][block] != -1) {
             ++(cache->lruArray[set][block]);
         }
