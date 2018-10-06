@@ -69,7 +69,6 @@ void updateOnHit(Cache *cache, unsigned long addr){
 		}
 	}
 }
-}
 
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     Cache *cache = malloc(sizeof *cache);
