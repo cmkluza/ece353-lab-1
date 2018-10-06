@@ -11,9 +11,9 @@ int tagBits(Cache *cache, unsigned long addr) {
 
 int indexBits(Cache *cache, unsigned long addr) {
     //shift out tagbits
-    addr <<= (cache->tagBits);
+    unsigned long addr1=addr <<= (cache->tagBits);
     //then shift out offset bits
-    return (unsigned) addr >> (cache->offsetBits + cache->tagBits);
+    return addr1 >> (cache->offsetBits + cache->tagBits);
 }
 
 int setIndexLength(Cache *cache) {
@@ -28,14 +28,7 @@ int offsetLength(Cache *cache) {
 
 int whichSet(Cache *cache, unsigned long addr) {
 
-    int setNum = -1;                                   //return if miss
-    int i;
-    for (i = 0; i < cache->numSets; i++) {
-        if (tagBits(cache, addr) == cache->tagArray[indexBits(cache, addr)][i]) {
-            setNum = i;                              //return index if hit
-        }
-    }
-    return setNum;
+    return (int) indexBits(cache, addr);
 }
 
 
