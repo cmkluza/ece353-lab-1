@@ -11,63 +11,86 @@ int tagBits(Cache *cache, unsigned long addr) {
 
 int indexBits(Cache *cache, unsigned long addr) {
     //shift out tagbits
-    addr <<= (cache->tagBits);                         
+    addr <<= (cache->tagBits);
     //then shift out offset bits
     return (unsigned) addr >> (cache->offsetBits + cache->tagBits);
 }
 
-int setIndexLength(Cache *cache){
+int setIndexLength(Cache *cache) {
     // returns number of index bits in the address
     return (unsigned) cache->indexBits;
 }
 
-int offsetLength(Cache *cache){
+int offsetLength(Cache *cache) {
     //returns number of offset bits in the address
-	return (unsigned) cache->offsetBits;
+    return (unsigned) cache->offsetBits;
 }
 
-int whichSet(Cache *cache, unsigned long addr){
+int whichSet(Cache *cache, unsigned long addr) {
 
-	int setNum=-1;                                   //return if miss
-	int i;
-	for (i=0; i< cache->numSets; i++) {
-		if (tagBits(cache, addr)==cache->tagArray[indexBits(cache, addr)][i]) 
-		{
-		setNum= i;                              //return index if hit
-		}
-	}
-	return setNum;
+    int setNum = -1;                                   //return if miss
+    int i;
+    for (i = 0; i < cache->numSets; i++) {
+        if (tagBits(cache, addr) == cache->tagArray[indexBits(cache, addr)][i]) {
+            setNum = i;                              //return index if hit
+        }
+    }
+    return setNum;
 }
 
-int hitWay(Cache *cache, unsigned long addr){
-
-	if (whichSet(cache,  addr)==-1){    //if whichSet returns -1 it is a miss
-		updateOnMiss(cache, addr);
-		return -1;
-}
-	else{                                                  //else it is a hit
-		updateOnHit(cache, addr);
-		return whichSet(cache, addr)+1;    
-}
+int hitWay(Cache *cache, unsigned long addr) {
+    if (whichSet(cache, addr) == -1) {    //if whichSet returns -1 it is a miss
+        updateOnMiss(cache, addr);
+        return -1;
+    } else {                                                  //else it is a hit
+        updateOnHit(cache, addr);
+        return whichSet(cache, addr) + 1;
+    }
 }
 
-void updateOnHit(Cache *cache, unsigned long addr){
-	int i;
-	for (i=0; i<cache->numSets; i++){                            //go into each set
-		int j;
-		for (j=0; j<cache->numBlocks; i++){                  //then each block
-			if (cache->lruArray[i][j]==-1){                 //if hasn't been used
-			}
-			if ((i==whichSet(cache, addr))&&(j==indexBits(cache, addr))){
-				cache->lruArray[i][j]=0;                           
-			                                               //if its the place of the hit (reset LRU)
-			}
-			else{
-				cache->lruArray[i][j]++;
-				                                      //if else then increase its age
-			}
-		}
-	}
+void updateOnHit(Cache *cache, unsigned long addr) {
+    int i;
+    for (i = 0; i < cache->numSets; i++) {                            //go into each set
+        int j;
+        for (j = 0; j < cache->numBlocks; i++) {                  //then each block
+            if (cache->lruArray[i][j] == -1) {                 //if hasn't been used
+            }
+            if ((i == whichSet(cache, addr)) && (j == indexBits(cache, addr))) {
+                cache->lruArray[i][j] = 0;
+                //if its the place of the hit (reset LRU)
+            } else {
+                cache->lruArray[i][j]++;
+                //if else then increase its age
+            }
+        }
+    }
+}
+
+void updateOnMiss(Cache *cache, unsigned long addr) {
+    // find a location to store the new tag
+    int lruBlock = 0, block;
+    int set = whichSet(cache, addr);
+    for (block = 0; block < cache->numBlocks; ++block) {
+        // stop immediately if we find an unused location
+        if (cache->lruArray[set][block] == -1) {
+            lruBlock = block;
+            break;
+        }
+
+        // otherwise, find the largest (least recently used) value
+        if (cache->lruArray[set][block] > cache->lruArray[set][lruBlock]) {
+            lruBlock = block;
+        }
+    }
+
+    // increment every other valid block
+    for (block = 0; block < cache->numBlocks; ++block) {
+        if (cache->lruArray[set][block] != -1) {
+            ++(cache->lruArray[set][block]);
+        }
+    }
+
+    cache->lruArray[set][lruBlock] = 0;
 }
 
 Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
@@ -85,13 +108,13 @@ Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     cache->offsetBits = _log2((unsigned) blockSize);
     cache->indexBits = _log2((unsigned) cache->numSets);
     cache->tagBits = 32 - cache->offsetBits - cache->indexBits;
-    
+
     // allocate an array containing each set
     cache->tagArray = malloc(cache->numSets * sizeof *cache->tagArray);
     cache->lruArray = malloc(cache->numSets * sizeof *cache->lruArray);
     if (!cache->tagArray || !cache->lruArray) {
         fprintf(stderr, "memory allocation failed - "
-                "couldn't allocate %d sets for %s in cache, terminating program\n",
+                        "couldn't allocate %d sets for %s in cache, terminating program\n",
                 cache->numSets, !cache->tagArray ? "tagArray" : "lruArray");
         exit(EXIT_FAILURE);
     }
@@ -100,10 +123,10 @@ Cache *cacheAlloc(int setAssoc, int blockSize, int cacheSize) {
     int set, block;
     for (set = 0; set < cache->numSets; ++set) {
         *(cache->tagArray + set) = malloc(setAssoc * sizeof **(cache->tagArray + set));
-        *(cache->lruArray + set) = malloc(setAssoc * sizeof**(cache->lruArray + set));
+        *(cache->lruArray + set) = malloc(setAssoc * sizeof **(cache->lruArray + set));
         if (!*(cache->tagArray + set) || !*(cache->lruArray + set)) {
             fprintf(stderr, "memory allocation failed - "
-                    "couldn't allocate %d blocks for set %d in %s, terminating program\n",
+                            "couldn't allocate %d blocks for set %d in %s, terminating program\n",
                     setAssoc, set, !*(cache->tagArray + set) ? "tagArray" : "lruArray");
             exit(EXIT_FAILURE);
         }

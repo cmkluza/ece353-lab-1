@@ -5,8 +5,6 @@
 // Structs, enums, typdefs //
 /////////////////////////////
 
-// todo convert all int/unsigned to uint32_t (int32_t for lruArray) to fit 32-bit addresses without worry?
-
 /** 
  * A collection of cache configuration info and arrays storing relevant cache data.
  */
