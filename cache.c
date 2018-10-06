@@ -29,8 +29,9 @@ int offsetLength(Cache *cache){
 int whichSet(Cache *cache, unsigned long addr){
 
 	int setNum=-1;                                   //return if miss
-	for (int i=0; i< cache->numSets; i++) {
-		if (tagBits(Cache *cache, unsigned long addr)==cache->tagArray[indexBits(Cache *cache, unsigned long addr)][i]) 
+	int i;
+	for (i=0; i< cache->numSets; i++) {
+		if (tagBits(cache, addr)==cache->tagArray[indexBits(cache, addr)][i]) 
 		{
 		setNum= i;                              //return index if hit
 		}
@@ -40,22 +41,24 @@ int whichSet(Cache *cache, unsigned long addr){
 
 int hitWay(Cache *cache, unsigned long addr){
 
-	if (whichSet(Cache *cache, unsigned long addr)==-1){    //if whichSet returns -1 it is a miss
-		updateOnMiss(Cache *cache, unsigned addr);
+	if (whichSet(cache,  addr)==-1){    //if whichSet returns -1 it is a miss
+		updateOnMiss(cache, addr);
 		return -1;
 }
 	else{                                                  //else it is a hit
-		updateOnHit(Cache *cache, unsigned long addr);
-		return whichSet(Cache *cache, unsigned long addr)+1;    
+		updateOnHit(cache, addr);
+		return whichSet(cache, addr)+1;    
 }
 }
 
 void updateOnHit(Cache *cache, unsigned long addr){
-	for (int i=0; i<cache->numSets; i++){                            //go into each set
-		for (int j=0; j<cache->numBlocks; i++){                  //then each block
+	int i;
+	for (i=0; i<cache->numSets; i++){                            //go into each set
+		int j;
+		for (j=0; j<cache->numBlocks; i++){                  //then each block
 			if (cache->lruArray[i][j]==-1){                 //if hasn't been used
 			}
-			if ((i==whichSet(Cache *cache, unsigned long addr))&&(j==indexBits(Cache *cache, unsigned long addr))){
+			if ((i==whichSet(cache, addr))&&(j==indexBits(cache, addr))){
 				cache->lruArray[i][j]==0;                           
 			                                               //if its the place of the hit (reset LRU)
 			}
