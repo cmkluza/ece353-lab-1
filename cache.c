@@ -63,7 +63,7 @@ void updateOnHit(Cache *cache, unsigned long addr){
 			                                               //if its the place of the hit (reset LRU)
 			}
 			else{
-				cache->lruArray[i][j]==cache->lruArray[i][j]+1;
+				cache->lruArray[i][j]++;
 				                                      //if else then increase its age
 			}
 		}
