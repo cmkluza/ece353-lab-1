@@ -40,7 +40,7 @@ typedef struct {
  * @param addr the address to check
  * @return a number [0,numSets) that indicates which set the address falls in
  */
-int whichSet(Cache *cache, int addr);
+int whichSet(Cache *cache, unsigned long addr);
 
 /**
  * Outputs the number of bits in the set index field of the address.
@@ -65,7 +65,7 @@ int offsetLength(Cache *cache);
  * @param addr the address to get the tag bits from
  * @return the tag bits associated with the address for the given cache
  */
-int tagBits(Cache *cache, int addr);
+int tagBits(Cache *cache, unsigned long addr);
 
 /**
  * If there is a hit, this outputs the cache way in which the accessed line can be found; it
@@ -75,7 +75,7 @@ int tagBits(Cache *cache, int addr);
  * @param addr the address to attempt to pull from the cache
  * @return the set in which the accessed block can be found or -1 for a miss
  */
-int hitWay(Cache *cache, int addr);
+int hitWay(Cache *cache, unsigned long addr);
 
 /**
  * Updates the `tagArray` and `lruArray` upon a hit. This function is only called on a cache
@@ -84,7 +84,7 @@ int hitWay(Cache *cache, int addr);
  * @param cache a pointer to a configured cache
  * @param addr the address where the hit occurred
  */
-void updateOnHit(Cache *cache, int addr);
+void updateOnHit(Cache *cache, unsigned long addr);
 
 /**
  * Updates the `tagArray` and `lruArray` upon a miss. This function is only called on a cache
@@ -93,7 +93,7 @@ void updateOnHit(Cache *cache, int addr);
  * @param cache a pointer to a configured cache
  * @param addr the address where the miss occurred
  */
-void updateOnMiss(Cache *cache, int addr);
+void updateOnMiss(Cache *cache, unsigned long addr);
 
 /**
  * Allocates and configures a cache struct given the cache parameters.
