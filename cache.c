@@ -11,7 +11,7 @@ int tagBits(Cache *cache, unsigned long addr) {
 
 int indexBits(Cache *cache, unsigned long addr) {
     //shift out tagbits
-    unsigned long addr1=addr <<= (cache->tagBits);
+    unsigned long addr1=addr << (cache->tagBits);
     //then shift out offset bits
     return addr1 >> (cache->offsetBits + cache->tagBits);
 }
