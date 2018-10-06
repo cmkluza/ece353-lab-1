@@ -53,7 +53,7 @@ void updateOnHit(Cache *cache, unsigned long addr) {
     int i;
     for (i = 0; i < cache->numSets; i++) {                            //go into each set
         int j;
-        for (j = 0; j < cache->numBlocks; i++) {                  //then each block
+        for (j = 0; j < cache->setAssoc; i++) {                  //then each block
             if (cache->lruArray[i][j] == -1) {                 //if hasn't been used
             }
             if ((i == whichSet(cache, addr)) && (j == indexBits(cache, addr))) {
