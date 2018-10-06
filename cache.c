@@ -37,7 +37,7 @@ int whichSet(Cache *cache, unsigned long addr) {
     }
     return setNum;
 }
-\n
+
 
 int hitWay(Cache *cache, unsigned long addr) {
     if (whichSet(cache, addr) == -1) {    //if whichSet returns -1 it is a miss
