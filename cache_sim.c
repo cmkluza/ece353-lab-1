@@ -6,7 +6,7 @@
  * simulates accessing them in a CPU cache of the
  * specified configuration.
  *
- * @authors Laura Deburgo, Cameron Kluza, Kyle McWherter
+ * @authors Laura DeBurgo, Cameron Kluza, Kyle McWherter
  */
 
 #include <stdlib.h>
