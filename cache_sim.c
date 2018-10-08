@@ -2,7 +2,7 @@
  * ECE 353 - Computer Systems Lab
  * Lab I, Cache Simulator
  *
- * main.c - reads a trace of addresses from a file and
+ * cache_sim.c - reads a trace of addresses from a file and
  * simulates accessing them in a CPU cache of the
  * specified configuration.
  *
